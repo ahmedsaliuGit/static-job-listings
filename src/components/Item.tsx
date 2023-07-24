@@ -1,10 +1,19 @@
-import { ItemType } from "../containers/Main";
+import { ItemType } from "../App";
 
 type ItemProps = {
   item: ItemType;
+  filter: string[];
+  addToFilter: (filter: string[]) => void;
 };
 
-export default function Item({ item }: ItemProps) {
+export default function Item({ item, filter, addToFilter }: ItemProps) {
+  const onFilterClick = (filt: string) => {
+    if (filter.indexOf(filt) !== -1) return false;
+
+    const newFilter = [...filter, filt];
+    addToFilter(newFilter);
+  };
+
   return (
     <li
       className={`relative mb-6 pt-7 md:pt-11 lg:bg-white lg:border-l-4 ${
@@ -47,10 +56,16 @@ export default function Item({ item }: ItemProps) {
         <hr className="bg-dark-grayish-cygan h-[1px] mb-4 lg:hidden" />
         <div>
           <ul className="flex justify-start items-center flex-wrap gap-4 pr-4">
-            <li className="bg-background hover:bg-primary hover:cursor-pointer hover:text-white text-primary p-2 rounded font-bold">
+            <li
+              className="bg-background hover:bg-primary hover:cursor-pointer hover:text-white text-primary p-2 rounded font-bold"
+              onClick={() => onFilterClick(item.role)}
+            >
               {item.role}
             </li>
-            <li className="bg-background hover:bg-primary hover:cursor-pointer hover:text-white text-primary p-2 rounded font-bold">
+            <li
+              className="bg-background hover:bg-primary hover:cursor-pointer hover:text-white text-primary p-2 rounded font-bold"
+              onClick={() => onFilterClick(item.level)}
+            >
               {item.level}
             </li>
             {item.languages &&
@@ -58,6 +73,7 @@ export default function Item({ item }: ItemProps) {
                 <li
                   key={`lang-${index}`}
                   className="bg-background hover:bg-primary hover:cursor-pointer hover:text-white text-primary p-2 rounded font-bold"
+                  onClick={() => onFilterClick(language)}
                 >
                   {language}
                 </li>
@@ -67,6 +83,7 @@ export default function Item({ item }: ItemProps) {
                 <li
                   key={`tool-${index}`}
                   className="bg-background hover:bg-primary hover:cursor-pointer hover:text-white text-primary p-2 rounded font-bold"
+                  onClick={() => onFilterClick(tool)}
                 >
                   {tool}
                 </li>
