@@ -21,7 +21,7 @@ export default function Item({ item, filter, addToFilter }: ItemProps) {
       } lg:rounded lg:p-8 lg:shadow-[0_17px_30px_-25px_hsl(180,29%,50%)] lg:flex lg:items-center lg:justify-start gap-4`}
     >
       <div className="w-1/6 lg:w-auto absolute lg:relative left-6 lg:left-0 top-0">
-        <img src={item.logo} alt={item.company} />
+        <img src={`${item.logo}`} alt={item.company} />
       </div>
       <div
         className={`bg-white border-l-4 lg:border-none ${
