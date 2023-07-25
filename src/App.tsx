@@ -22,7 +22,6 @@ export type ItemType = {
 import listingsData from "./data.json";
 
 function App() {
-  const [listings, setListings] = useState<ItemType[] | []>(listingsData);
   const [listingFiltered, setListingFiltered] = useState<string[] | []>([]);
   return (
     <>
@@ -31,7 +30,7 @@ function App() {
         clearFilter={setListingFiltered}
       />
       <Main
-        listings={listings}
+        listings={listingsData}
         addToFilter={setListingFiltered}
         filter={listingFiltered}
       />
