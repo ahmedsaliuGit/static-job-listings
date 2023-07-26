@@ -8,27 +8,33 @@ type MainProps = {
 };
 
 export default function Main({ listings, addToFilter, filter }: MainProps) {
-  const renderedFilter = listings.filter((item) => {
-    if (filter.includes(item.role)) {
-      return true;
-    } else if (filter.includes(item.level)) {
-      return true;
-    } else if (item.languages.length > 0 || item.tools.length > 0) {
-      const languagesTools = [...item.languages, ...item.tools];
+  const filterByRole = listings.filter((listing) =>
+    filter.includes(listing.role)
+  );
+  const filterByLevel = listings.filter((listing) =>
+    filter.includes(listing.level)
+  );
+  const filterByLanguage = listings.filter((listing) =>
+    filter.some((lang) => listing.languages.includes(lang))
+  );
+  const filterByTool = listings.filter((listing) =>
+    filter.some((tool) => listing.tools.includes(tool))
+  );
 
-      for (let langTool of filter) {
-        return languagesTools.includes(langTool);
-      }
-    }
-
-    return false;
-  });
+  const mergeFilter: ItemType[] = [
+    ...new Set<ItemType>([
+      ...filterByRole,
+      ...filterByTool,
+      ...filterByLanguage,
+      ...filterByLevel,
+    ]),
+  ];
 
   return (
     <main className="bg-background p-5">
       <ul className="lg:max-w-[1284px] lg:mx-auto lg:mt-10">
-        {renderedFilter.length > 0
-          ? renderedFilter.map((item) => (
+        {mergeFilter.length > 0
+          ? mergeFilter.map((item) => (
               <Item
                 item={item}
                 key={item.id}
