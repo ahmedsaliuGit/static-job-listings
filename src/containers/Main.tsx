@@ -8,48 +8,33 @@ type MainProps = {
 };
 
 export default function Main({ listings, addToFilter, filter }: MainProps) {
-  const filterByRole = listings.filter((listing) =>
-    filter.includes(listing.role)
-  );
-  const filterByLevel = listings.filter((listing) =>
-    filter.includes(listing.level)
-  );
-  const filterByLanguage = listings.filter((listing) =>
-    filter.some((lang) => listing.languages.includes(lang))
-  );
-  const filterByTool = listings.filter((listing) =>
-    filter.some((tool) => listing.tools.includes(tool))
-  );
+  const search = (listings: ItemType[]) => {
+    return listings.filter((listing) => {
+      if (filter.length > 0) {
+        return filter.some(
+          (para) =>
+            listing.role === para ||
+            listing.level === para ||
+            listing.languages.includes(para) ||
+            listing.tools.includes(para)
+        );
+      }
 
-  const mergeFilter: ItemType[] = [
-    ...new Set<ItemType>([
-      ...filterByRole,
-      ...filterByTool,
-      ...filterByLanguage,
-      ...filterByLevel,
-    ]),
-  ];
+      return true;
+    });
+  };
 
   return (
     <main className="bg-background p-5">
       <ul className="lg:max-w-[1284px] lg:mx-auto lg:mt-10">
-        {mergeFilter.length > 0
-          ? mergeFilter.map((item) => (
-              <Item
-                item={item}
-                key={item.id}
-                addToFilter={addToFilter}
-                filter={filter}
-              />
-            ))
-          : listings.map((item) => (
-              <Item
-                item={item}
-                key={item.id}
-                addToFilter={addToFilter}
-                filter={filter}
-              />
-            ))}
+        {search(listings).map((item) => (
+          <Item
+            item={item}
+            key={item.id}
+            addToFilter={addToFilter}
+            filter={filter}
+          />
+        ))}
       </ul>
     </main>
   );
